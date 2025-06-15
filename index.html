@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registro de Vendas – Clube ID</title>
+  <style>
+    :root {
+      --primary: #36b6ff;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    body {
+      background: #f4f8fc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .card {
+      background: #fff;
+      width: 100%;
+      max-width: 600px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      position: relative;
+    }
+    .logo {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      height: 78px; /* reduzido ~10% (antes 87px) */
+      width: auto;
+    }
+    h2 {
+      margin-bottom: 1.5rem;
+      color: #333;
+      text-align: left;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+      color: #333;
+    }
+    input,
+    select,
+    textarea,
+    button {
+      width: 100%;
+      padding: 0.6rem 0.7rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(54, 182, 255, 0.2);
+    }
+    button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 1.5rem;
+    }
+    button:hover {
+      background: #219cf0;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <img src="logoclubeid.jpeg" alt="Logo Clube ID" class="logo" />
+    <h2>Registro de Venda – Clube ID</h2>
+
+    <form id="formVenda">
+      <label>Data da Conclusão da Venda *
+        <input type="date" name="dataConclusao" required />
+      </label>
+
+      <label>Vendedor *
+        <input type="text" name="vendedor" required />
+      </label>
+
+      <label>Prontuário do Titular *
+        <input type="text" name="prontuario" required />
+      </label>
+
+      <label>Nome do Titular *
+        <input type="text" name="nomeTitular" required />
+      </label>
+
+      <label>Tipo de Clube *
+        <select name="tipoClube" required>
+          <option value="">-- selecione --</option>
+          <option>Individual</option>
+          <option>Casal</option>
+          <option>Família</option>
+        </select>
+      </label>
+
+      <label>Tipo de recorrência *
+        <select name="tipoRecorrencia" required>
+          <option value="">-- selecione --</option>
+          <option>Mensal</option>
+          <option>Semestral</option>
+          <option>Anual</option>
+        </select>
+      </label>
+
+      <label>Quantidade de Excedentes
+        <input type="number" name="qtdExcedentes" min="0" step="1" />
+      </label>
+
+      <label>Observação
+        <textarea name="observacao" rows="3"></textarea>
+      </label>
+
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+
+  <script>
+    const WEBAPP_URL =
+      "https://script.google.com/macros/s/AKfycbyceKZV4GZl1mr8aOMlJIfYw9oINuyKvMA6jh3DMgj-fW-o1M-IVaaCiENCCejFotM8/exec";
+
+    document.getElementById("formVenda").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const dados = new FormData(e.target);
+      const body = new URLSearchParams(dados);
+
+      try {
+        const resp = await fetch(WEBAPP_URL, {
+          method: "POST",
+          body,
+        });
+
+        if (resp.ok) {
+          alert("Venda registrada com sucesso!");
+          e.target.reset();
+        } else {
+          const txt = await resp.text();
+          alert("Erro ao enviar: " + txt);
+        }
+      } catch (err) {
+        alert("Falha de rede: " + err);
+      }
+    });
+  </script>
+</body>
+</html>
